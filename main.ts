@@ -27,4 +27,11 @@ if (typeof post.url !== 'string' || !POST_URL.test(post.url)) {
   process.exit(1);
 }
 
+// The gate refuses a POST.json over 16384 bytes, so fail here instead.
+const size = readFileSync(dst).length;
+if (size > 16384) {
+  console.error(`POST.json is ${size} bytes, over the 16384 byte cap`);
+  process.exit(1);
+}
+
 console.log(`Entry post: ${post.url}`);
